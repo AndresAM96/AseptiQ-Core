@@ -1,0 +1,61 @@
+/* Design tokens — AseptiQ v1.0.0 */
+:root {
+  /* Superficies */
+  --bg: #10131a;
+  --surface-1: #171b24;
+  --surface-2: #1e2330;
+  --surface-3: #262c3b;
+  --border: #2b3140;
+
+  /* Texto */
+  --text-primary: #edeff3;
+  --text-secondary: #8d95a6;
+  --text-muted: #5b6274;
+
+  /* Semánticos */
+  --accent: #ffb020;
+  --accent-ink: #241a02;
+  --success: #3ddc84;
+  --success-bg: rgba(61, 220, 132, 0.12);
+  --warning: #ffb020;
+  --warning-bg: rgba(255, 176, 32, 0.12);
+  --danger: #ff5c5c;
+  --danger-bg: rgba(255, 92, 92, 0.12);
+  --info: #6ab7ff;
+  --info-bg: rgba(106, 183, 255, 0.14);
+
+  /* Tipografía */
+  --font-sans: 'Space Grotesk', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* Layout */
+  --sidebar-width: 220px;
+  --sidebar-collapsed: 60px;
+  --content-max-width: 1280px;
+
+  /* Transiciones */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+}
+
+html[data-theme='light'] {
+  --bg: #f5f6f8;
+  --surface-1: #ffffff;
+  --surface-2: #f0f2f5;
+  --surface-3: #e4e7eb;
+  --border: #d8dce1;
+  --text-primary: #1a1f2b;
+  --text-secondary: #5a6271;
+  --text-muted: #8d95a6;
+  --accent: #e08900;
+  --accent-ink: #ffffff;
+  --success: #1a9f5a;
+  --success-bg: rgba(26, 159, 90, 0.12);
+  --warning: #c78500;
+  --warning-bg: rgba(199, 133, 0, 0.12);
+  --danger: #d63c3c;
+  --danger-bg: rgba(214, 60, 60, 0.12);
+  --info: #2a7fdb;
+  --info-bg: rgba(42, 127, 219, 0.12);
+}
