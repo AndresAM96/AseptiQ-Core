@@ -7,13 +7,20 @@ export function renderLayout(container, onLogout) {
     <div style="display: flex; min-height: 100vh;">
       <!-- Sidebar -->
       <aside style="width: 220px; flex-shrink: 0; background: var(--surface-1); border-right: 1px solid var(--border); padding: 20px 12px; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;">
-        <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 700; margin-bottom: 20px; padding: 0 8px; color: var(--text-primary);">
-          <svg style="width: 22px; height: 22px; color: var(--accent);" viewBox="0 0 32 32" fill="none">
-            <circle cx="14" cy="14" r="10" stroke="currentColor" stroke-width="2.5"/>
-            <rect x="9.5" y="9.5" width="9" height="9" rx="1.5" fill="currentColor"/>
-            <line x1="21" y1="21" x2="27" y2="27" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-          </svg>
-          AseptiQ <small style="font-size: 9.5px; color: var(--text-muted);">v1.0</small>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 8px;">
+          <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 700; color: var(--text-primary);">
+            <svg style="width: 22px; height: 22px; color: var(--accent);" viewBox="0 0 32 32" fill="none">
+              <circle cx="14" cy="14" r="10" stroke="currentColor" stroke-width="2.5"/>
+              <rect x="9.5" y="9.5" width="9" height="9" rx="1.5" fill="currentColor"/>
+              <line x1="21" y1="21" x2="27" y2="27" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+            AseptiQ <small style="font-size: 9.5px; color: var(--text-muted);">v1.0</small>
+          </div>
+          <!-- Botón de Campana -->
+          <button id="btn-campana" style="background: transparent; border: 1px solid var(--border); border-radius: 6px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-secondary); position: relative; transition: border-color 0.2s;">
+            🔔
+            <span id="campana-badge" style="display: none; position: absolute; top: -4px; right: -4px; background: var(--danger); color: white; font-size: 9px; font-weight: bold; min-width: 14px; height: 14px; border-radius: 7px; padding: 0 3px; align-items: center; justify-content: center;">0</span>
+          </button>
         </div>
 
         <nav style="flex: 1; overflow-y: auto;">
@@ -98,6 +105,23 @@ export function renderLayout(container, onLogout) {
       }
     });
   });
+
+  // Lógica de la Campana de Notificaciones
+  const btnCampana = container.querySelector('#btn-campana');
+  if (btnCampana) {
+    btnCampana.onclick = () => {
+      // Simulamos la alerta (en la Fase 6 conectaremos esto a la base de datos real)
+      const badge = container.querySelector('#campana-badge');
+      badge.style.display = 'flex';
+      badge.textContent = '3';
+
+      // Efecto visual al hacer clic
+      btnCampana.style.borderColor = 'var(--accent)';
+      setTimeout(() => btnCampana.style.borderColor = 'var(--border)', 300);
+
+      alert('Tienes 3 alertas de stock crítico.\n\n(Por ahora es una simulación, en la próxima fase la conectamos a la base de datos).');
+    };
+  }
 
   return container.querySelector('#main-content');
 }
