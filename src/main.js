@@ -13,6 +13,7 @@ import { moduloOrdenes } from './modules/ordenes/index.js';
 import { moduloCentral } from './modules/central/index.js';
 import { moduloDespachos } from './modules/despachos/index.js';
 import { moduloKardex } from './modules/kardex/index.js';
+import { moduloTrazabilidad } from './modules/trazabilidad/index.js';
 
 // Importamos el nuevo módulo
 import { moduloInsumos } from './modules/insumos/index.js';
@@ -60,6 +61,7 @@ registerRoute('ordenes', moduloOrdenes);
 registerRoute('central', moduloCentral);
 registerRoute('despachos', moduloDespachos);
 registerRoute('kardex', moduloKardex);
+registerRoute('trazabilidad', moduloTrazabilidad);
 
 // --- Arranque ---
 async function bootstrap() {
