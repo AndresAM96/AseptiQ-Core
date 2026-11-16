@@ -44,6 +44,8 @@ export function renderLayout(container, onLogout) {
           <a href="#/auditoria" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Auditoría</a>
           <a href="#/compras" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Compras</a>
           <a href="#/mermas" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Mermas</a>
+          <a href="#/costos" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Costos OP</a>
+          <a href="#/rentabilidad" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Rentabilidad</a>
 
           <!-- Sistema -->
           <div style="font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin: 16px 0 6px; padding: 0 12px;">Sistema</div>

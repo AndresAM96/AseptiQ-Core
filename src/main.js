@@ -23,6 +23,8 @@ import { moduloProduccion } from './modules/produccion/index.js';
 import { moduloCompras } from './modules/compras/index.js';
 import { moduloMermas } from './modules/mermas/index.js';
 import { moduloSubproductos } from './modules/subproductos/index.js';
+import { moduloCostos } from './modules/costos/index.js';
+import { moduloRentabilidad } from './modules/rentabilidad/index.js';
 
 // Importamos el nuevo módulo
 import { moduloInsumos } from './modules/insumos/index.js';
@@ -51,6 +53,8 @@ registerRoute('produccion', moduloProduccion);
 registerRoute('compras', moduloCompras);
 registerRoute('mermas', moduloMermas);
 registerRoute('subproductos', moduloSubproductos);
+registerRoute('costos', moduloCostos);
+registerRoute('rentabilidad', moduloRentabilidad);
 
 // --- Arranque ---
 async function bootstrap() {
