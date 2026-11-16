@@ -36,7 +36,7 @@ export function renderRentabilidad(container, data) {
     <h2 style="font-size: 20px; margin: 0 0 4px;">Rentabilidad</h2>
     <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 24px;">Análisis de márgenes por producto basado en el costo teórico de la receta.</p>
 
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+    <div class="grid-cols-3" style="display: grid; gap: 16px; margin-bottom: 24px;">
       <div style="background: var(--surface-1); border: 1px solid var(--border); padding: 20px; border-radius: 12px;">
         <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">Ingreso Promedio / U</div>
         <div style="font-size: 24px; font-weight: 700; color: var(--info);">${money(ingresosTotales / (productos.length || 1))}</div>

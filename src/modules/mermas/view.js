@@ -38,7 +38,7 @@ export function renderMermas(container, movimientos) {
     <h2 style="font-size: 20px; margin: 0 0 4px;">Mermas y Ajustes</h2>
     <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 24px;">Análisis de pérdidas de inventario (excluye devoluciones).</p>
 
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+    <div class="grid-cols-3" style="display: grid; gap: 16px; margin-bottom: 24px;">
       <div style="background: var(--danger-bg); border: 1px solid var(--danger); padding: 20px; border-radius: 12px;">
         <div style="font-size: 11px; color: var(--danger); text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">Pérdida Total (Valorizada)</div>
         <div style="font-size: 24px; font-weight: 700; color: var(--danger);">${money(perdidaTotal)}</div>

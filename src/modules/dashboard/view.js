@@ -68,7 +68,7 @@ export function renderDashboard(container, data, config) {
     </div>
 
     <!-- Tarjetas KPI -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+    <div class="grid-cols-4" style="display: grid; gap: 16px; margin-bottom: 24px;">
       <div style="background: var(--surface-1); border: 1px solid var(--border); padding: 20px; border-radius: 12px;">
         <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 600; margin-bottom: 8px;">Valor Inventario</div>
         <div style="font-size: 24px; font-weight: 700; color: var(--accent);">${money(valorInventario)}</div>

@@ -47,7 +47,7 @@ export function renderCompras(container, movimientos) {
     <h2 style="font-size: 20px; margin: 0 0 4px;">Compras por Proveedor</h2>
     <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 24px;">Análisis de todas las entradas de mercancía agrupadas por proveedor.</p>
 
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+    <div class="grid-cols-3" style="display: grid; gap: 16px; margin-bottom: 24px;">
       <div style="background: var(--surface-1); border: 1px solid var(--border); padding: 20px; border-radius: 12px;">
         <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">Total Comprado</div>
         <div style="font-size: 24px; font-weight: 700; color: var(--accent);">${money(totalGlobal)}</div>
@@ -105,7 +105,7 @@ export function renderCompras(container, movimientos) {
             <tbody>${filasDetalle}</tbody>
           </table>
         `,
-        footer: `<button id="btn-close" style="background: transparent; border: 1px solid var(--border); color: var(--text-primary); padding: 8px 16px; border-radius: 6px; cursor: pointer;">Cerrar</button>`,
+        footer: `<button id="btn-close" style="padding: 8px 16px; border-radius: 6px; cursor: pointer;">Cerrar</button>`,
         onOpen: (overlay) => {
           overlay.querySelector('#btn-close').onclick = cerrarModal;
         }

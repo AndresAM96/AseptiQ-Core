@@ -43,7 +43,7 @@ export function renderConsolidado(container, data, onGenerar) {
           Presiona "Actualizar Datos" para calcular los requerimientos de compra.
         </div>
       ` : `
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+        <div class="grid-cols-3" style="display: grid; gap: 16px; margin-bottom: 24px;">
           <div style="background: var(--surface-1); border: 1px solid var(--border); padding: 20px; border-radius: 12px;">
             <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">OPs Analizadas</div>
             <div style="font-size: 24px; font-weight: 700;">${totalOps}</div>
