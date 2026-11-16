@@ -14,6 +14,8 @@ import { moduloKardex } from './modules/kardex/index.js';
 import { moduloTrazabilidad } from './modules/trazabilidad/index.js';
 import { moduloAuditoria } from './modules/auditoria/index.js';
 import { moduloDashboard } from './modules/dashboard/index.js';
+import { moduloConfiguracion } from './modules/configuracion/index.js';
+import { moduloUsuarios } from './modules/usuarios/index.js';
 
 // Importamos el nuevo módulo
 import { moduloInsumos } from './modules/insumos/index.js';
@@ -33,6 +35,8 @@ registerRoute('despachos', moduloDespachos);
 registerRoute('kardex', moduloKardex);
 registerRoute('trazabilidad', moduloTrazabilidad);
 registerRoute('auditoria', moduloAuditoria);
+registerRoute('configuracion', moduloConfiguracion);
+registerRoute('usuarios', moduloUsuarios);
 
 // --- Arranque ---
 async function bootstrap() {
