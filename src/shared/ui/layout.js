@@ -35,6 +35,7 @@ export function renderLayout(container, onLogout) {
           <a href="#/central" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Central EO</a>
           <a href="#/despachos" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Despachos</a>
           <a href="#/entradas" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Entrada Mercancía</a>
+          <a href="#/bodega" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Bodega PT</a>
           
           <!-- Catálogo -->
           <div style="font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin: 16px 0 6px; padding: 0 12px;">Catálogo</div>
