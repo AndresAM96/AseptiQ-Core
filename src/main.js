@@ -25,6 +25,8 @@ import { moduloMermas } from './modules/mermas/index.js';
 import { moduloSubproductos } from './modules/subproductos/index.js';
 import { moduloCostos } from './modules/costos/index.js';
 import { moduloRentabilidad } from './modules/rentabilidad/index.js';
+import { moduloConsolidado } from './modules/consolidado/index.js';
+import { moduloProgramacion } from './modules/programacion/index.js';
 
 // Importamos el nuevo módulo
 import { moduloInsumos } from './modules/insumos/index.js';
@@ -55,6 +57,8 @@ registerRoute('mermas', moduloMermas);
 registerRoute('subproductos', moduloSubproductos);
 registerRoute('costos', moduloCostos);
 registerRoute('rentabilidad', moduloRentabilidad);
+registerRoute('consolidado', moduloConsolidado);
+registerRoute('programacion', moduloProgramacion);
 
 // --- Arranque ---
 async function bootstrap() {
