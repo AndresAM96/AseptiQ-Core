@@ -19,6 +19,9 @@ import { moduloUsuarios } from './modules/usuarios/index.js';
 import { moduloBackup } from './modules/backup/index.js';
 import { moduloNovedades } from './modules/novedades/index.js';
 import { moduloDevoluciones } from './modules/devoluciones/index.js';
+import { moduloProduccion } from './modules/produccion/index.js';
+import { moduloCompras } from './modules/compras/index.js';
+import { moduloMermas } from './modules/mermas/index.js';
 
 // Importamos el nuevo módulo
 import { moduloInsumos } from './modules/insumos/index.js';
@@ -43,6 +46,9 @@ registerRoute('usuarios', moduloUsuarios);
 registerRoute('backup', moduloBackup);
 registerRoute('novedades', moduloNovedades);
 registerRoute('devoluciones', moduloDevoluciones);
+registerRoute('produccion', moduloProduccion);
+registerRoute('compras', moduloCompras);
+registerRoute('mermas', moduloMermas);
 
 // --- Arranque ---
 async function bootstrap() {
