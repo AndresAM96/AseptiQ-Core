@@ -5,9 +5,9 @@ import { traducirError } from '../../shared/http/errores.js';
 export async function getSubproductosData() {
   const [subsRes, movsRes] = await Promise.all([
     supabase.from('subproductos').select('id, codigo, nombre, existencia_actual').eq('estado_activo', true).order('nombre'),
-    // Traemos los últimos movimientos de producción de subproductos
     supabase.from('movimientos')
-      .select('*, subproducto_producciones(subproducto_id, subproductos(nombre, codigo))')
+      // LE INDICAMOS A SUPABASE QUÉ LLAVE FORÁNEA USAR
+      .select('*, subproducto_producciones!movimientos_subproducto_produccion_id_fkey(subproducto_id, subproductos(nombre, codigo))')
       .eq('tipo', 'produccion_subproducto')
       .order('fecha', { ascending: false })
       .limit(20)

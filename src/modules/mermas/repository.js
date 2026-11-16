@@ -6,9 +6,13 @@ export async function getMermasData() {
     .from('movimientos')
     .select('*, insumos(nombre, codigo, unidad_consumo)')
     .eq('tipo', 'salida')
-    .is('proveedor_id', null) // Excluir devoluciones
-    .is('orden_id', null);    // Excluir consumos de OP
+    .is('orden_id', null); // Excluir consumos de OP
 
   if (error) throw new Error(traducirError(error.message));
-  return data;
+
+  // Excluir devoluciones a proveedor (esas se ven en su propio módulo)
+  return data.filter(m => {
+    const obs = (m.observaciones || '').toLowerCase();
+    return !obs.includes('devolución');
+  });
 }

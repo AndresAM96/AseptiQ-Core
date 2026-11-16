@@ -8,7 +8,7 @@ export function renderCompras(container, movimientos) {
   let totalEntradas = 0;
 
   movimientos.forEach(m => {
-    const provId = m.proveedor_id;
+    const provId = m.insumo_lotes.proveedor_id; // <-- CAMBIO AQUÍ
     const costo = Number(m.costo_unitario_momento) || 0;
     const cant = Number(m.cantidad) || 0;
     const subtotal = costo * cant;
@@ -19,7 +19,7 @@ export function renderCompras(container, movimientos) {
     if (!porProv[provId]) {
       porProv[provId] = {
         id: provId,
-        nombre: m.sys_proveedores.razon_social,
+        nombre: m.insumo_lotes.sys_proveedores.razon_social,
         total: 0,
         entradas: 0,
         movs: []
