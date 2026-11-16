@@ -1,5 +1,6 @@
 import { getProfile, logout } from '../auth/session.js';
 import { SVG_SPRITE } from './icons.js';
+import { initNotifications } from './notifications.js';
 
 export function renderLayout(container, onLogout) {
   const profile = getProfile();
@@ -38,12 +39,12 @@ export function renderLayout(container, onLogout) {
               <span class="brand-text">Asepti<span style="color:var(--accent);">Q</span> <small style="font-size:9.5px;color:var(--text-muted);font-weight:500;user-select:none;">v0.5.0</small></span>
             </div>
             
-            <button id="btn-campana" class="sidebar-bell" title="Notificaciones">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;">
+            <button id="btn-campana" class="sidebar-bell" title="Notificaciones" aria-label="Notificaciones">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
                 <path d="M10.5 21a2 2 0 0 0 3 0"/>
               </svg>
-              <span id="campana-badge" class="sidebar-bell-badge" style="display: none; position: absolute; top: -5px; right: -5px; background: var(--danger); color: white; font-size: 9px; font-weight: bold; min-width: 16px; height: 16px; border-radius: 8px; padding: 0 4px; align-items: center; justify-content: center;">54</span>
+              <span id="campana-badge" class="sidebar-bell-badge" style="display:none;">0</span>
             </button>
             
             <button id="btn-toggle-sidebar" class="sidebar-toggle" title="Minimizar menú">◀</button>
@@ -136,6 +137,19 @@ export function renderLayout(container, onLogout) {
         </div>
         <button class="ghost small" id="btn-logout" title="Cerrar sesión">Cerrar sesión</button>
       </aside>
+
+      <!-- OVERLAY DE NOTIFICACIONES -->
+      <div class="notif-overlay" id="notifOverlay">
+        <div class="notif-panel" role="dialog" aria-label="Notificaciones">
+          <div class="notif-header">
+            <h4>Notificaciones</h4>
+            <span class="notif-total" id="notifHeaderMeta"></span>
+          </div>
+          <div class="notif-body" id="notifBody"></div>
+        </div>
+      </div>
+
+      <main style="flex: 1; min-width: 0; padding: 28px 36px; max-width: 1280px;">
 
       <main style="flex: 1; min-width: 0; padding: 28px 36px; max-width: 1280px;">
         <div id="main-content"></div>
@@ -234,11 +248,9 @@ export function renderLayout(container, onLogout) {
     });
   });
 
-  container.querySelector('#btn-campana').onclick = () => {
-    const badge = container.querySelector('#campana-badge');
-    badge.style.display = 'flex';
-    alert('Tienes 54 alertas de stock crítico.');
-  };
+  // Inicializar notificaciones (pasar config actual)
+  const config = JSON.parse(localStorage.getItem('inv_config') || '{"umbralUrgente":30,"umbralReorden":60}');
+  initNotifications(container, config);
 
   container.querySelector('#btn-logout').addEventListener('click', async () => {
     await logout();
