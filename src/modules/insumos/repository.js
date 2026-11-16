@@ -42,3 +42,24 @@ export async function crearInsumo(data) {
   if (error) throw new Error(traducirError(error.message));
   return result;
 }
+
+export async function actualizarInsumo(id, data) {
+  const { data: result, error } = await supabase
+    .from('insumos')
+    .update(data)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw new Error(traducirError(error.message));
+  return result;
+}
+
+export async function toggleEstadoInsumo(id, nuevoEstado) {
+  const { error } = await supabase
+    .from('insumos')
+    .update({ estado_activo: nuevoEstado })
+    .eq('id', id);
+
+  if (error) throw new Error(traducirError(error.message));
+}
