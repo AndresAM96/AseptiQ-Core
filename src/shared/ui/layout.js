@@ -43,6 +43,7 @@ export function renderLayout(container, onLogout) {
           <div style="font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin: 16px 0 6px; padding: 0 12px;">Sistema</div>
           <a href="#/configuracion" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Configuración</a>
           ${profile.role === 'admin' ? `<a href="#/usuarios" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Usuarios</a>` : ''}
+          ${profile.role === 'admin' ? `<a href="#/backup" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Backup</a>` : ''}
         </nav>
 
         <div style="margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border);">

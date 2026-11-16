@@ -93,3 +93,5 @@ BEGIN
   );
 END;
 $$;
+
+GRANT INSERT ON public.backup_log TO authenticated;

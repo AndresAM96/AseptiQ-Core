@@ -16,6 +16,7 @@ import { moduloAuditoria } from './modules/auditoria/index.js';
 import { moduloDashboard } from './modules/dashboard/index.js';
 import { moduloConfiguracion } from './modules/configuracion/index.js';
 import { moduloUsuarios } from './modules/usuarios/index.js';
+import { moduloBackup } from './modules/backup/index.js';
 
 // Importamos el nuevo módulo
 import { moduloInsumos } from './modules/insumos/index.js';
@@ -37,6 +38,7 @@ registerRoute('trazabilidad', moduloTrazabilidad);
 registerRoute('auditoria', moduloAuditoria);
 registerRoute('configuracion', moduloConfiguracion);
 registerRoute('usuarios', moduloUsuarios);
+registerRoute('backup', moduloBackup);
 
 // --- Arranque ---
 async function bootstrap() {
