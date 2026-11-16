@@ -64,7 +64,9 @@ export function abrirModal(opts) {
     box.style.transform = 'translateY(20px) scale(0.98)';
     setTimeout(() => {
       overlay.remove();
-      _modalStack.splice(_modalStack.indexOf(id), 1);
+      // Buscamos el índice correcto del objeto modal
+      const index = _modalStack.findIndex(m => m.id === id);
+      if (index !== -1) _modalStack.splice(index, 1);
       if (opts.onClose) opts.onClose();
     }, 200);
   };
@@ -90,8 +92,13 @@ export function abrirModal(opts) {
 /**
  * Cierra el modal superior.
  */
-export function cerrarModal() {
-  if (_modalStack.length > 0) {
+export function cerrarModal(id = null) {
+  if (id) {
+    // Cierra el modal específico que le pasemos
+    const modal = _modalStack.find(m => m.id === id);
+    if (modal) modal.close();
+  } else if (_modalStack.length > 0) {
+    // Si no le pasamos ID, cierra el último
     _modalStack[_modalStack.length - 1].close();
   }
 }

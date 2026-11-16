@@ -9,6 +9,7 @@ import { abrirModal, cerrarModal } from './shared/ui/modal.js';
 import { moduloProveedores } from './modules/proveedores/index.js';
 import { moduloProductos } from './modules/productos/index.js';
 import { moduloEntradas } from './modules/entradas/index.js';
+import { moduloOrdenes } from './modules/ordenes/index.js';
 
 // Importamos el nuevo módulo
 import { moduloInsumos } from './modules/insumos/index.js';
@@ -52,6 +53,7 @@ registerRoute('insumos', moduloInsumos);
 registerRoute('proveedores', moduloProveedores);
 registerRoute('productos', moduloProductos);
 registerRoute('entradas', moduloEntradas);
+registerRoute('ordenes', moduloOrdenes);
 
 // --- Arranque ---
 async function bootstrap() {
