@@ -48,6 +48,8 @@ export function renderLayout(container, onLogout) {
           <a href="#/rentabilidad" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Rentabilidad</a>
           <a href="#/programacion" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Programación</a>
           <a href="#/consolidado" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Consolidado MP</a>
+          <a href="#/ordenes_compra" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Órdenes de Compra</a>
+          <a href="#/evaluacion_prov" class="nav-item" style="display: block; padding: 8px 12px; border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px;">Evaluación Prov.</a>
 
           <!-- Sistema -->
           <div style="font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin: 16px 0 6px; padding: 0 12px;">Sistema</div>

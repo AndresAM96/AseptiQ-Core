@@ -27,6 +27,8 @@ import { moduloCostos } from './modules/costos/index.js';
 import { moduloRentabilidad } from './modules/rentabilidad/index.js';
 import { moduloConsolidado } from './modules/consolidado/index.js';
 import { moduloProgramacion } from './modules/programacion/index.js';
+import { moduloEvaluacionProv } from './modules/evaluacion_prov/index.js';
+import { moduloOrdenesCompra } from './modules/ordenes_compra/index.js';
 
 // Importamos el nuevo módulo
 import { moduloInsumos } from './modules/insumos/index.js';
@@ -59,6 +61,8 @@ registerRoute('costos', moduloCostos);
 registerRoute('rentabilidad', moduloRentabilidad);
 registerRoute('consolidado', moduloConsolidado);
 registerRoute('programacion', moduloProgramacion);
+registerRoute('evaluacion_prov', moduloEvaluacionProv);
+registerRoute('ordenes_compra', moduloOrdenesCompra);
 
 // --- Arranque ---
 async function bootstrap() {

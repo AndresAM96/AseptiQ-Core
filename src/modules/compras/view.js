@@ -105,7 +105,7 @@ export function renderCompras(container, movimientos) {
             <tbody>${filasDetalle}</tbody>
           </table>
         `,
-        footer: `<button id="btn-close" style="padding: 8px 16px; border-radius: 6px; cursor: pointer;">Cerrar</button>`,
+        footer: `<button id="btn-close" style="background: transparent; border: 1px solid var(--border); color: var(--text-primary); padding: 8px 16px; border-radius: 6px; cursor: pointer;">Cerrar</button>`,
         onOpen: (overlay) => {
           overlay.querySelector('#btn-close').onclick = cerrarModal;
         }
