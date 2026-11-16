@@ -1,5 +1,6 @@
 import { esc, num, money } from '../../core/formatters.js';
 import { estadoInsumo } from '../../core/estadoInsumo.js';
+import { icono } from '../../shared/ui/icons.js'
 
 export function renderDashboard(container, data, config) {
   const { insumos, ops, movimientos, lotesCentral } = data;
@@ -68,22 +69,46 @@ export function renderDashboard(container, data, config) {
     </div>
 
     <!-- Tarjetas KPI -->
-    <div class="grid-cols-4" style="display: grid; gap: 16px; margin-bottom: 24px;">
-      <div style="background: var(--surface-1); border: 1px solid var(--border); padding: 20px; border-radius: 12px;">
-        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 600; margin-bottom: 8px;">Valor Inventario</div>
-        <div style="font-size: 24px; font-weight: 700; color: var(--accent);">${money(valorInventario)}</div>
+    <div class="grid-cols-4" style="gap: 16px; margin-bottom: 24px;">
+      
+      <div style="background: var(--surface-1); border: 1px solid var(--border); padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 16px;">
+        <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--accent-bg); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 24px;">
+          ${icono('dollar', 'lg')}
+        </div>
+        <div>
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 600; margin-bottom: 4px;">Valor Inventario</div>
+          <div style="font-size: 22px; font-weight: 700; color: var(--text-primary);">${money(valorInventario)}</div>
+        </div>
       </div>
-      <div style="background: var(--surface-1); border: 1px solid var(--border); padding: 20px; border-radius: 12px;">
-        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 600; margin-bottom: 8px;">Insumos Críticos</div>
-        <div style="font-size: 24px; font-weight: 700; color: ${insumosUrgentes > 0 ? 'var(--danger)' : 'var(--success)'};">${insumosUrgentes}</div>
+
+      <div style="background: var(--surface-1); border: 1px solid var(--border); padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 16px;">
+        <div style="width: 48px; height: 48px; border-radius: 12px; background: ${insumosUrgentes > 0 ? 'var(--danger-bg)' : 'var(--success-bg)'}; color: ${insumosUrgentes > 0 ? 'var(--danger)' : 'var(--success)'}; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+          ${icono('alert-triangle', 'lg')}
+        </div>
+        <div>
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 600; margin-bottom: 4px;">Insumos Críticos</div>
+          <div style="font-size: 22px; font-weight: 700; color: ${insumosUrgentes > 0 ? 'var(--danger)' : 'var(--success)'};">${insumosUrgentes}</div>
+        </div>
       </div>
-      <div style="background: var(--surface-1); border: 1px solid var(--border); padding: 20px; border-radius: 12px;">
-        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 600; margin-bottom: 8px;">OPs Activas</div>
-        <div style="font-size: 24px; font-weight: 700; color: var(--info);">${opsActivas}</div>
+
+      <div style="background: var(--surface-1); border: 1px solid var(--border); padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 16px;">
+        <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--info-bg); color: var(--info); display: flex; align-items: center; justify-content: center; font-size: 24px;">
+          ${icono('wrench', 'lg')}
+        </div>
+        <div>
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 600; margin-bottom: 4px;">OPs Activas</div>
+          <div style="font-size: 22px; font-weight: 700; color: var(--text-primary);">${opsActivas}</div>
+        </div>
       </div>
-      <div style="background: var(--surface-1); border: 1px solid var(--border); padding: 20px; border-radius: 12px;">
-        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 600; margin-bottom: 8px;">En Central EO</div>
-        <div style="font-size: 24px; font-weight: 700; color: var(--text-primary);">${num(cajasCentral)} <span style="font-size:12px; color:var(--text-muted);">u</span></div>
+
+      <div style="background: var(--surface-1); border: 1px solid var(--border); padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 16px;">
+        <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--surface-3); color: var(--text-primary); display: flex; align-items: center; justify-content: center; font-size: 24px;">
+          ${icono('package', 'lg')}
+        </div>
+        <div>
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 600; margin-bottom: 4px;">En Central EO</div>
+          <div style="font-size: 22px; font-weight: 700; color: var(--text-primary);">${num(cajasCentral)} <span style="font-size:12px; color:var(--text-muted);">u</span></div>
+        </div>
       </div>
     </div>
 

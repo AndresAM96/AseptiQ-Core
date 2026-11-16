@@ -4,6 +4,7 @@ import { initSession, setupAuthListener } from './shared/auth/session.js';
 import { renderLogin } from './shared/auth/login.js';
 import { renderLayout } from './shared/ui/layout.js';
 import { initRouter, registerRoute, navigate } from './shared/router.js';
+import { initResponsiveTables } from './shared/ui/responsive.js'; // <-- NUEVA
 import { moduloProveedores } from './modules/proveedores/index.js';
 import { moduloProductos } from './modules/productos/index.js';
 import { moduloEntradas } from './modules/entradas/index.js';
@@ -93,6 +94,8 @@ function bootApp() {
   mainContentContainer = renderLayout(app, () => {
     renderLoginScreen();
   });
+
+  initResponsiveTables(); // <-- INICIALIZAR OBSERVADOR
 
   initRouter(mainContentContainer, 'dashboard');
   navigate('dashboard');
