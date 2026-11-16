@@ -278,12 +278,23 @@ depends_on: [00-vision]
 * **RN-EO-005.** Un PT estéril con `lote_eo = NULL` no puede despacharse.
 * **RN-EO-006.** `numero_carga` puede repetirse entre PTs (`Q-K`). Unicidad solo implícita por `cargas_eo.id`.
 * **RN-EO-007.** Reproceso: unidades `en_reproceso` con `lote_eo = NULL` vuelven al flujo de central en una nueva carga. La `cantidad_rechazada` queda registrada en la carga original (histórico).
+- **RN-EO-008.** El envío a central es un traslado físico que mueve los lotes de `en_planta` a `en_central`. No asigna Lote EO en este paso.
+- **RN-EO-009.** El Lote EO se asigna en el momento de la esterilización (recepción de central a bodega). Dado que la central procesa por ciclos, una misma OP puede generar múltiples Lotes EO.
 
 ### 2.4 Producción de subproducto
 
 * **RN-SUB-001.** Producir consume insumos (FIFO) y subproductos hijos (FIFO). Crea `subproducto_producciones` con `orden_id = NULL` (*standalone*) o `orden_id = OP`.
 * **RN-SUB-002.** Consumir subproducto en una OP reduce `subproducto_producciones.cantidad_actual` (FIFO) y registra movimiento con `subproducto_produccion_id`.
 * **RN-SUB-003.** Auto-producción al vuelo: la OP produce internamente y consume en el mismo acto. `orden_id = OP` y `cantidad_actual = 0`.
+
+### 2.5 Salidas y Vencimientos
+
+- **RN-TRZ-005.** Al registrar la entrega de una OP (producción), el `lote_pt` generado debe calcular automáticamente su `fecha_vencimiento`. Fórmula: `fecha_produccion + (vida_util_meses) - 1 día`.
+- **RN-DES-001.** Los despachos de Producto Terminado deben seguir estrictamente **FIFO**. Al seleccionar un PT, el sistema debe sugerir el lote con la `fecha_produccion` más antigua y `cantidad_actual > 0`.
+
+## 2.6 Cargar Orden de Produccion.
+
+- **RN-ORD-001.** El lote de producción de una OP es exactamente el mismo `numero_op`. No se ingresa manualmente en el sistema.
 
 ## 3. Flujos
 

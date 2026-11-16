@@ -89,10 +89,6 @@ export function abrirModalNuevaOP(productos, sugerido, onCalcular) {
           <input type="text" id="op-numero" value="${sugerido}" style="flex: 1; border-radius: 0 8px 8px 0; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-primary); padding: 10px; font-family: var(--font-mono); font-size: 13.5px;">
         </div>
       </div>
-      <div>
-        <label style="display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 6px;">Lote de Producción (Único)</label>
-        <input type="text" id="op-lote" placeholder="Ej: L-2026-001" style="width: 100%; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); color: var(--text-primary); padding: 10px; font-size: 13.5px; font-family: var(--font-mono);">
-      </div>
       
       <div style="grid-column: 1 / -1;">
         <label style="display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 6px;">Producto Terminado</label>
@@ -158,16 +154,14 @@ export function abrirModalNuevaOP(productos, sugerido, onCalcular) {
         const codigo_pt = selPT.value;
         const cantidad = parseFloat(inpCant.value);
         const numero_op = overlay.querySelector('#op-numero').value.trim();
-        const lote = overlay.querySelector('#op-lote').value.trim();
 
         if (!codigo_pt || !cantidad || cantidad <= 0) return toast('Selecciona producto y cantidad válida.', 'error');
-        if (!numero_op || !lote) return toast('El Número de OP y el Lote son obligatorios.', 'error');
+        if (!numero_op) return toast('El Número de OP es obligatorio.', 'error');
 
         const data = {
           codigo_pt,
           cantidad,
           numero_op: 'OP-' + numero_op.replace('OP-', ''),
-          lote,
           prioridad: parseInt(overlay.querySelector('#op-prioridad').value),
           fecha_programada: overlay.querySelector('#op-fecha').value,
           fecha_fin_programada: overlay.querySelector('#op-fecha-fin').value
@@ -253,6 +247,52 @@ export function abrirModalCobertura(data, simulacion, insumos, onConfirmar) {
         } finally {
           // Esto asegura que el modal se cierre SIEMPRE, incluso si la base de datos falla
           cerrarModal();
+        }
+      };
+    }
+  });
+}
+
+export function abrirModalEntrega(numero_op, pendiente, onSave) {
+  const body = `
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div>
+        <label style="display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 6px;">Cantidad a Entregar (Pendiente: ${pendiente})</label>
+        <input type="number" id="ent-cant" value="${pendiente}" min="0.0001" max="${pendiente}" step="0.0001" style="width: 100%; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); color: var(--text-primary); padding: 10px; font-size: 13.5px;">
+      </div>
+      <!-- El lote se asigna automáticamente desde la OP -->
+      <div>
+        <label style="display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 6px;">Motivo / Observaciones (Opcional)</label>
+        <input type="text" id="ent-motivo" placeholder="Ej: Entrega parcial" style="width: 100%; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); color: var(--text-primary); padding: 10px; font-size: 13.5px;">
+      </div>
+    </div>
+  `;
+
+  abrirModal({
+    title: `Registrar Entrega - ${numero_op}`,
+    body,
+    footer: `
+      <button id="btn-cancel-ent" style="background: transparent; border: 1px solid var(--border); color: var(--text-primary); padding: 8px 16px; border-radius: 6px; cursor: pointer;">Cancelar</button>
+      <button id="btn-save-ent" style="background: var(--success); color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer;">Confirmar Entrega</button>
+    `,
+    onOpen: (overlay) => {
+      overlay.querySelector('#btn-cancel-ent').onclick = cerrarModal;
+
+      overlay.querySelector('#btn-save-ent').onclick = async () => {
+        const cant = parseFloat(overlay.querySelector('#ent-cant').value);
+        if (!cant || cant <= 0 || cant > pendiente) return toast('Cantidad inválida', 'error');
+
+        const btn = overlay.querySelector('#btn-save-ent');
+        btn.disabled = true;
+        btn.textContent = 'Entregando...';
+
+        try {
+          await onSave(cant, overlay.querySelector('#ent-motivo').value.trim());
+          cerrarModal();
+        } catch (err) {
+          toast(err.message, 'error');
+          btn.disabled = false;
+          btn.textContent = 'Confirmar Entrega';
         }
       };
     }

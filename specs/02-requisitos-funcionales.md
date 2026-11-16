@@ -367,6 +367,7 @@ depends_on: [00-vision, 01-actores-y-casos-de-uso, 03-modelo-de-dominio]
 * **CA-001.** Dado una OP con 3 entregas parciales, cuando el Operador abre el detalle, entonces ve los KPIs de progreso correctos y las 3 entregas en el historial.
 * **CA-002.** Dado una OP estéril con lotes en `en_central`, cuando el Operador abre el detalle, entonces ve el estado de la carga EO pendiente.
 * **CA-003.** Dado una OP con `cantidad_producida = cantidad_proyectada`, cuando el Operador abre el detalle, entonces el estado es `"Terminada"` y no se permite nueva entrega.
+- **CA-004.** Dado una entrega de OP, cuando se crea el lote PT, entonces la fecha_vencimiento se calcula automáticamente a 35 meses - 1 día desde la fecha de hoy.
 
 ---
 

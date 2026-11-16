@@ -1,8 +1,8 @@
-import { renderOrdenes, abrirModalNuevaOP, abrirModalCobertura } from './view.js';
+import { renderOrdenes, abrirModalNuevaOP, abrirModalCobertura, abrirModalEntrega } from './view.js';
 import { getOrdenesData, getSiguienteOP, simularCobertura, confirmarOrden } from './repository.js';
 import { toast } from '../../shared/ui/toast.js';
 import { traducirError } from '../../shared/http/errores.js';
-import { supabase } from '../../shared/http/client.js'; // Para la entrega temporal
+import { supabase } from '../../shared/http/client.js';
 import { cerrarModal } from '../../shared/ui/modal.js';
 
 export const moduloOrdenes = {
@@ -52,21 +52,18 @@ export const moduloOrdenes = {
             toast(err.message, 'error');
           }
         },
-        onEntregar: async (id, pendiente, nombre) => {
-          // Implementación rápida de entrega para pruebas
-          const cant = prompt(`¿Cuántas unidades deseas entregar de la ${nombre}? (Pendiente: ${pendiente})`, pendiente);
-          if (cant === null) return;
-          const cantidad = parseFloat(cant);
-          if (!cantidad || cantidad <= 0 || cantidad > pendiente) return toast('Cantidad inválida', 'error');
-
-          try {
-            await supabase.rpc('registrar_entrega_op', { p_orden_id: id, p_cantidad: cantidad });
+        onEntregar: (id, pendiente, nombre) => {
+            abrirModalEntrega(nombre, pendiente, async (cantidad, motivo) => {
+            const { error } = await supabase.rpc('registrar_entrega_op', {
+              p_orden_id: id,
+              p_cantidad: cantidad,
+              p_motivo: motivo || null
+            });
+            if (error) throw new Error(traducirError(error.message));
             toast('Entrega registrada exitosamente', 'success');
-            moduloOrdenes.mount(container);
-          } catch (err) {
-            toast(traducirError(err.message), 'error');
-          }
-        }
+            setTimeout(() => moduloOrdenes.mount(container), 300);
+          });
+        },
       };
 
       renderOrdenes(container, data, handlers);

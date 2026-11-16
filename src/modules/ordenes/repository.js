@@ -27,9 +27,8 @@ export async function confirmarOrden(data) {
     p_codigo_pt: data.codigo_pt,
     p_cantidad: data.cantidad,
     p_estado_cobertura: data.estado_cobertura,
-    p_detalle: data.detalle, // El JSON de simulación
+    p_detalle: data.detalle,
     p_numero_op: data.numero_op,
-    p_lote: data.lote,
     p_prioridad: data.prioridad,
     p_fecha_programada: data.fecha_programada || null,
     p_fecha_fin_programada: data.fecha_fin_programada || null
