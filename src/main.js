@@ -6,6 +6,7 @@ import { renderLayout } from './shared/ui/layout.js';
 import { initRouter, registerRoute, navigate } from './shared/router.js';
 import { toast } from './shared/ui/toast.js';
 import { abrirModal, cerrarModal } from './shared/ui/modal.js';
+import { moduloProveedores } from './modules/proveedores/index.js';
 
 // Importamos el nuevo módulo
 import { moduloInsumos } from './modules/insumos/index.js';
@@ -45,7 +46,8 @@ const dummyDashboard = {
 
 // Registro de Rutas
 registerRoute('dashboard', dummyDashboard);
-registerRoute('insumos', moduloInsumos); // <-- Módulo real conectado
+registerRoute('insumos', moduloInsumos);
+registerRoute('proveedores', moduloProveedores);
 
 // --- Arranque ---
 async function bootstrap() {
