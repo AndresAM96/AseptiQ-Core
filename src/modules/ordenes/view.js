@@ -1,32 +1,61 @@
 import { esc, num } from '../../core/formatters.js';
 import { toast } from '../../shared/ui/toast.js';
 import { abrirModal, cerrarModal } from '../../shared/ui/modal.js';
+import { icono } from '../../shared/ui/icons.js';
 
 export function renderOrdenes(container, data, handlers) {
-  const { productos, ordenes } = data;
+  const { productos, ordenes, ultimas } = data;
 
-  // Badges de estado
-  const getEstadoBadge = (estado) => {
-    const colores = { 'Pendiente': 'warning', 'En proceso': 'info', 'Terminada': 'success', 'Cancelada': 'danger' };
-    const color = colores[estado] || 'neutral';
-    return `<span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; background: var(--${color}-bg, var(--surface-3)); color: var(--${color}, var(--text-primary));">${estado}</span>`;
-  };
+  // Generar tabla de referencia (últimas 5)
+  const filasRef = ultimas.map(o => `
+    <tr style="border-bottom: 1px solid var(--border);">
+      <td style="padding: 10px 12px; font-family: var(--font-mono);">${esc(o.numero_op || '—')}</td>
+      <td style="padding: 10px 12px; font-family: var(--font-mono); color: var(--text-secondary); font-size: 12px;">${esc(o.lote)}</td>
+      <td style="padding: 10px 12px;">${esc(o.productos_terminados?.nombre || o.codigo_pt)}</td>
+      <td style="padding: 10px 12px; text-align: right;">${o.cantidad_proyectada}</td>
+      <td style="padding: 10px 12px; color: var(--text-secondary); font-size: 12px;">${new Date(o.fecha_creacion).toLocaleDateString('es-CO')}</td>
+    </tr>
+  `).join('');
 
-  const filas = ordenes.map(op => {
-    const fechaProg = op.fecha_programada ? new Date(op.fecha_programada + 'T12:00:00').toLocaleDateString('es-CO') : '—';
+  // Generar tabla de órdenes
+  const filasOrdenes = ordenes.map(o => {
+    const prod = o.productos_terminados?.nombre || o.codigo_pt;
+    const pc = o.productos_terminados?.unidades_por_caja || 1;
+    const cajas = o.cantidad_proyectada && pc > 1 ? Math.ceil(o.cantidad_proyectada / pc) : null;
+    const fin = o.estado_op === 'Terminada' || o.estado_op === 'Cancelada';
+    const producida = Number(o.cantidad_producida) || 0;
+    const proyectada = Number(o.cantidad_proyectada) || 0;
+    const pendiente = proyectada - producida;
+    const hayProgreso = producida > 0 && producida < proyectada;
+
+    const progresoTxt = proyectada > 0 ? `<br><span style="color:${producida >= proyectada ? 'var(--success)' : 'var(--info)'};font-size:11px;">${producida}/${proyectada} entregado${producida >= proyectada ? ' ✓' : ''}</span>` : '';
+
+    // Badges
+    const prioridadColors = { 1: 'danger', 2: 'warning', 3: 'info', 4: 'success' };
+    const prioridadLabels = { 1: 'Muy alta', 2: 'Alta', 3: 'Normal', 4: 'Baja' };
+    const prioridad = o.prioridad ? `<span class="badge ${prioridadColors[o.prioridad]}">${prioridadLabels[o.prioridad]}</span>` : '—';
+
+    const coberturaColors = { 'Cubierto': 'success', 'Cubierta': 'success', 'Reorden': 'warning', 'Urgente': 'danger' };
+    const cobertura = `<span class="badge ${coberturaColors[o.estado_cobertura] || 'neutral'}">${o.estado_cobertura}</span>`;
+
+    const estadoColors = { 'Pendiente': 'neutral', 'En proceso': 'info', 'Terminada': 'success', 'Cancelada': 'danger' };
+    const estado = `<span class="badge ${estadoColors[o.estado_op] || 'neutral'}">${o.estado_op}</span>`;
+
+    const fechaProg = o.fecha_programada ? new Date(o.fecha_programada + 'T12:00:00').toLocaleDateString('es-CO') : '<span style="color:var(--text-muted);">—</span>';
+
     return `
-      <tr style="border-bottom: 1px solid var(--border);">
-        <td style="padding: 10px 12px; font-family: var(--font-mono); font-weight: 600;">${esc(op.numero_op || 'S/N')}</td>
-        <td style="padding: 10px 12px; font-family: var(--font-mono); color: var(--text-secondary);">${esc(op.lote)}</td>
-        <td style="padding: 10px 12px;">${esc(op.codigo_pt)}</td>
-        <td style="padding: 10px 12px; text-align: right; font-weight: 500;">${num(op.cantidad_proyectada)}</td>
-        <td style="padding: 10px 12px; text-align: right; color: var(--success);">${num(op.cantidad_producida)}</td>
-        <td style="padding: 10px 12px; text-align: center;">${fechaProg}</td>
-        <td style="padding: 10px 12px; text-align: center;">${getEstadoBadge(op.estado_op)}</td>
+      <tr style="border-bottom: 1px solid var(--border);" data-estado="${o.estado_op}">
+        <td style="padding: 10px 12px;" class="mono">${esc(o.numero_op || '—')}<br><span style="font-size:11px;color:var(--text-muted);">${esc(o.lote)}</span></td>
+        <td style="padding: 10px 12px;">${prioridad}</td>
+        <td style="padding: 10px 12px;">${esc(prod)}</td>
+        <td style="padding: 10px 12px; text-align: right;">${proyectada}${cajas ? `<br><span style="color:var(--text-muted);font-size:11px;">≈ ${cajas} cajas</span>` : ''}${progresoTxt}</td>
+        <td style="padding: 10px 12px; color: var(--text-secondary); font-size: 12px;">${fechaProg}</td>
+        <td style="padding: 10px 12px;">${cobertura}</td>
+        <td style="padding: 10px 12px;">${estado}</td>
         <td style="padding: 10px 12px; text-align: right; white-space: nowrap;">
-          ${op.estado_op !== 'Terminada' && op.estado_op !== 'Cancelada'
-            ? `<button data-entregar="${op.id}" data-pendiente="${op.cantidad_proyectada - op.cantidad_producida}" data-nombre="${esc(op.numero_op)}" style="background: var(--success); color: #fff; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Entregar</button>`
-            : ''}
+          <button data-detalle="${o.id}" title="Ver insumos, progreso y lotes de esta OP" style="background: transparent; border: 1px solid var(--border); color: var(--text-primary); padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; margin-right: 4px;">Detalle</button>
+          <button data-entregar="${o.id}" data-pendiente="${pendiente}" data-nombre="${o.numero_op}" ${fin || pendiente <= 0 ? 'disabled' : ''} title="Registrar entrega a cliente (total o parcial)" style="background: var(--success); color: #fff; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; margin-right: 4px; opacity: ${fin || pendiente <= 0 ? '0.5' : '1'};">${hayProgreso ? 'Entrega parcial' : 'Entregar'}</button>
+          <button data-cancelar="${o.id}" ${fin ? 'disabled' : ''} title="Cancelar esta Orden de Producción" style="background: var(--danger-bg); color: var(--danger); border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; opacity: ${fin ? '0.5' : '1'};">Cancelar</button>
         </td>
       </tr>
     `;
@@ -35,34 +64,112 @@ export function renderOrdenes(container, data, handlers) {
   container.innerHTML = `
     <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px;">
       <div>
-        <h2 style="font-size: 20px; margin: 0 0 4px;">Cargar Orden (OP)</h2>
-        <p style="color: var(--text-secondary); font-size: 13px; margin: 0;">Planifica la producción y calcula la cobertura de insumos.</p>
+        <h2 style="font-size: 20px; margin: 0 0 4px;">Cargar orden semanal</h2>
+        <p style="color: var(--text-secondary); font-size: 13px; margin: 0;">El sistema explota insumos directos y los de cada subproducto (recursivo).</p>
       </div>
-      <button id="btn-nueva-op" style="background: var(--accent); color: var(--accent-ink); border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer;">+ Nueva OP</button>
     </div>
 
-    <div style="background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;">
-      <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
-        <thead>
-          <tr style="border-bottom: 1px solid var(--border); text-align: left; background: var(--surface-2);">
-            <th style="padding: 12px; color: var(--text-secondary); font-weight: 500;">N° OP</th>
-            <th style="padding: 12px; color: var(--text-secondary); font-weight: 500;">Lote</th>
-            <th style="padding: 12px; color: var(--text-secondary); font-weight: 500;">Código PT</th>
-            <th style="padding: 12px; color: var(--text-secondary); font-weight: 500; text-align: right;">Proyectado</th>
-            <th style="padding: 12px; color: var(--text-secondary); font-weight: 500; text-align: right;">Producido</th>
-            <th style="padding: 12px; color: var(--text-secondary); font-weight: 500; text-align: center;">F. Programada</th>
-            <th style="padding: 12px; color: var(--text-secondary); font-weight: 500; text-align: center;">Estado</th>
-            <th style="padding: 12px; color: var(--text-secondary); font-weight: 500; text-align: right;">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${ordenes.length === 0 ? '<tr><td colspan="8" style="padding: 24px; text-align: center; color: var(--text-muted);">No hay órdenes registradas.</td></tr>' : filas}
-        </tbody>
-      </table>
+    <!-- Panel Referencia -->
+    <div class="panel force-collapsed" style="background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; overflow: hidden;">
+      <div class="panel-header" style="padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+        <h3 style="margin: 0; font-size: 14px; font-weight: 600;">Referencia · Últimas 5 OPs cargadas</h3>
+        <span style="color: var(--text-muted); transform: rotate(90deg);">›</span>
+      </div>
+      <div class="panel-body" style="display: none;">
+        ${ultimas.length === 0 ? '<div style="padding: 20px; text-align: center; color: var(--text-muted);">Aún no hay OPs cargadas.</div>' : `
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border); text-align: left; background: var(--surface-2);">
+              <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500;">N° OP</th>
+              <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500;">Lote</th>
+              <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500;">Producto</th>
+              <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500; text-align: right;">Cant.</th>
+              <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500;">Fecha</th>
+            </tr>
+          </thead>
+          <tbody>${filasRef}</tbody>
+        </table>`}
+      </div>
+    </div>
+
+    <!-- Panel Principal -->
+    <div class="panel" style="background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;">
+      <div class="panel-header" style="padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+        <h3 style="margin: 0; font-size: 14px; font-weight: 600;">Órdenes registradas</h3>
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <button id="btn-export-ordenes" class="secondary small" title="Descargar las órdenes en formato Excel (CSV)" style="background: var(--surface-3); border: 1px solid var(--border); color: var(--text-primary); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 4px;">
+            ${icono('download','sm')} Exportar CSV
+          </button>
+          <button id="btn-refresh-ordenes" title="Actualizar la lista de órdenes" style="background: transparent; border: 1px solid var(--border); color: var(--text-secondary); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+            ${icono('clock','sm')}
+          </button>
+          <button class="btn-add" id="btn-nueva-op" title="Crear nueva Orden de Producción (OP)" style="background: var(--accent); color: var(--accent-ink); border: none; width: 30px; height: 30px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
+          <span style="color: var(--text-muted); transform: rotate(-90deg);">›</span>
+        </div>
+      </div>
+      
+      <div style="padding: 12px 18px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; flex-wrap: wrap;">
+        <input type="text" id="buscar_ordenes" placeholder="Buscar por OP o producto..." style="flex: 1 1 220px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); color: var(--text-primary); padding: 10px 12px; font-size: 13.5px;">
+      </div>
+      
+      <div style="padding: 10px 18px; border-bottom: 1px solid var(--border); background: var(--surface-2);">
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-secondary); cursor: pointer;">
+          <input type="checkbox" id="toggleFinalizadas" style="width: auto; margin: 0; cursor: pointer;">
+          Mostrar también las órdenes terminadas y canceladas
+        </label>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table id="tablaOrdenes" class="responsive-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border); text-align: left; background: var(--surface-2);">
+              <th style="padding: 12px; color: var(--text-secondary); font-weight: 500;">N° OP</th>
+              <th style="padding: 12px; color: var(--text-secondary); font-weight: 500;">Prior.</th>
+              <th style="padding: 12px; color: var(--text-secondary); font-weight: 500;">Producto</th>
+              <th style="padding: 12px; color: var(--text-secondary); font-weight: 500; text-align: right;">Cantidad</th>
+              <th style="padding: 12px; color: var(--text-secondary); font-weight: 500;">Programada</th>
+              <th style="padding: 12px; color: var(--text-secondary); font-weight: 500;">Cobertura</th>
+              <th style="padding: 12px; color: var(--text-secondary); font-weight: 500;">Estado</th>
+              <th style="padding: 12px; color: var(--text-secondary); font-weight: 500; text-align: right;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${ordenes.length === 0 ? '<tr><td colspan="8" style="padding: 32px; text-align: center; color: var(--text-muted);">No hay órdenes para mostrar.</td></tr>' : filasOrdenes}
+          </tbody>
+        </table>
+      </div>
     </div>
   `;
 
-  // Bindings
+  // --- LÓGICA DE LA TABLA ---
+
+  // Buscador
+  const inputBuscar = container.querySelector('#buscar_ordenes');
+  inputBuscar.oninput = () => {
+    const q = inputBuscar.value.toLowerCase();
+    container.querySelectorAll('#tablaOrdenes tbody tr').forEach(tr => {
+      tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  };
+
+  // Checkbox de finalizadas
+  const chkFinalizadas = container.querySelector('#toggleFinalizadas');
+  chkFinalizadas.onchange = () => {
+    const mostrar = chkFinalizadas.checked;
+    container.querySelectorAll('#tablaOrdenes tbody tr').forEach(tr => {
+      const estado = tr.getAttribute('data-estado');
+      if (!mostrar && (estado === 'Terminada' || estado === 'Cancelada')) {
+        tr.style.display = 'none';
+      } else {
+        tr.style.display = '';
+      }
+    });
+  };
+
+  // Ocultar finalizadas por defecto
+  chkFinalizadas.onchange();
+
+  // Botones
   container.querySelector('#btn-nueva-op').onclick = () => handlers.onNueva(productos);
 
   container.querySelectorAll('[data-entregar]').forEach(btn => {
@@ -71,6 +178,12 @@ export function renderOrdenes(container, data, handlers) {
       const pendiente = parseFloat(btn.dataset.pendiente);
       const nombre = btn.dataset.nombre;
       handlers.onEntregar(id, pendiente, nombre);
+    };
+  });
+
+  container.querySelectorAll('[data-cancelar]').forEach(btn => {
+    btn.onclick = () => {
+      handlers.onCancelar(btn.dataset.cancelar);
     };
   });
 }

@@ -12,8 +12,6 @@ export const moduloOrdenes = {
 
     try {
       const data = await getOrdenesData();
-
-      // Necesitamos todos los insumos para cruzar la cobertura
       const { data: insumos } = await supabase.from('insumos').select('id, nombre, existencia_actual, unidad_consumo');
 
       const handlers = {
@@ -23,47 +21,40 @@ export const moduloOrdenes = {
             abrirModalNuevaOP(productos, sugerido, async (opData) => {
               try {
                 const simulacion = await simularCobertura(opData.codigo_pt, opData.cantidad);
-
-                // 1. Cerramos el modal de Nueva OP
                 cerrarModal();
-
-                // 2. Esperamos 250ms (lo que dura la animación) y abrimos el de Cobertura
                 setTimeout(() => {
                   abrirModalCobertura(opData, simulacion, insumos, async (opDataFinal) => {
                     try {
                       await confirmarOrden(opDataFinal);
                       toast('Orden confirmada exitosamente', 'success');
-                      // El cierre del modal de Cobertura ya lo hace view.js
-
-                      // Recargamos la tabla después de que el modal se haya ido
                       setTimeout(() => moduloOrdenes.mount(container), 300);
-                    } catch (err) {
-                      toast(err.message, 'error');
-                      throw err; // Relanzamos para que el botón no se quede en "Confirmando..."
-                    }
+                    } catch (err) { toast(err.message, 'error'); throw err; }
                   });
                 }, 250);
-
-              } catch (err) {
-                toast(err.message, 'error');
-              }
+              } catch (err) { toast(err.message, 'error'); }
             });
-          } catch (err) {
-            toast(err.message, 'error');
-          }
+          } catch (err) { toast(err.message, 'error'); }
         },
         onEntregar: (id, pendiente, nombre) => {
-            abrirModalEntrega(nombre, pendiente, async (cantidad, motivo) => {
+          abrirModalEntrega(nombre, pendiente, async (cantidad, motivo) => {
             const { error } = await supabase.rpc('registrar_entrega_op', {
-              p_orden_id: id,
-              p_cantidad: cantidad,
-              p_motivo: motivo || null
+              p_orden_id: id, p_cantidad: cantidad, p_motivo: motivo || null
             });
             if (error) throw new Error(traducirError(error.message));
             toast('Entrega registrada exitosamente', 'success');
             setTimeout(() => moduloOrdenes.mount(container), 300);
           });
         },
+        onCancelar: async (id) => {
+          if(!confirm('¿Estás seguro de cancelar esta OP?')) return;
+          try {
+            await supabase.rpc('cancelar_orden', { p_orden_id: id, p_motivo: 'Cancelada desde UI' });
+            toast('Orden cancelada', 'success');
+            moduloOrdenes.mount(container);
+          } catch (err) {
+            toast(traducirError(err.message), 'error');
+          }
+        }
       };
 
       renderOrdenes(container, data, handlers);

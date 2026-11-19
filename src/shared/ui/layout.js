@@ -67,13 +67,13 @@ export function renderLayout(container, onLogout) {
               <span class="nav-group-arrow">▾</span>
             </button>
             <div class="nav-group-items">
-              <a href="#/dashboard" data-tab="dashboard" class="nav-item">Dashboard</a>
-              <a href="#/ordenes" data-tab="ordenes" class="nav-item">Cargar orden</a>
-              <a href="#/novedades" data-tab="novedades" class="nav-item">Novedades</a>
-              <a href="#/entradas" data-tab="entradas" class="nav-item">Entrada mercancía</a>
-              <a href="#/devoluciones" data-tab="devoluciones" class="nav-item">Devoluciones</a>
-              <a href="#/despachos" data-tab="despachos" class="nav-item">Despachos</a>
-              <a href="#/bodega" data-tab="bodega" class="nav-item">Bodega PT</a>
+              <a href="#/dashboard" data-tab="dashboard" class="nav-item" title="Ir al Dashboard general">Dashboard</a>
+              <a href="#/ordenes" data-tab="ordenes" class="nav-item" title="Crear y gestionar órdenes de producción">Cargar orden</a>
+              <a href="#/novedades" data-tab="novedades" class="nav-item" title="Historial de órdenes activas">Novedades</a>
+              <a href="#/entradas" data-tab="entradas" class="nav-item" title="Registrar recepción de mercancía">Entrada mercancía</a>
+              <a href="#/devoluciones" data-tab="devoluciones" class="nav-item" title="Devoluciones a proveedor">Devoluciones</a>
+              <a href="#/despachos" data-tab="despachos" class="nav-item" title="Salidas a clientes y entregas diarias">Despachos</a>
+              <a href="#/bodega" data-tab="bodega" class="nav-item" title="Escanear y ubicar cajas en bodega">Bodega PT</a>
             </div>
           </div>
 
@@ -83,11 +83,11 @@ export function renderLayout(container, onLogout) {
               <span class="nav-group-arrow">▾</span>
             </button>
             <div class="nav-group-items">
-              <a href="#/insumos" data-tab="insumos" class="nav-item">Insumos</a>
-              <a href="#/productos" data-tab="productos" class="nav-item">Productos & BOM</a>
-              <a href="#/subproductos" data-tab="subproductos" class="nav-item">Subproductos</a>
-              <a href="#/proveedores" data-tab="proveedores" class="nav-item">Proveedores</a>
-              <a href="#/produccion" data-tab="produccion" class="nav-item">Producción Subprod.</a>
+              <a href="#/insumos" data-tab="insumos" class="nav-item" title="Materia prima y material de empaque">Insumos</a>
+              <a href="#/productos" data-tab="productos" class="nav-item" title="Subproductos y paquetes con BOM">Productos & BOM</a>
+              <a href="#/subproductos" data-tab="subproductos" class="nav-item" title="Productos en proceso intermedios">Subproductos</a>
+              <a href="#/proveedores" data-tab="proveedores" class="nav-item" title="Maestro de proveedores">Proveedores</a>
+              <a href="#/produccion" data-tab="produccion" class="nav-item" title="Fabricar subproductos para stock">Producción Subprod.</a>
             </div>
           </div>
 
@@ -97,18 +97,18 @@ export function renderLayout(container, onLogout) {
               <span class="nav-group-arrow">▾</span>
             </button>
             <div class="nav-group-items">
-              <a href="#/programacion" data-tab="programacion" class="nav-item">Programación</a>
-              <a href="#/consolidado" data-tab="consolidado" class="nav-item">Consolidado MP</a>
-              <a href="#/ordenes_compra" data-tab="ordenes_compra" class="nav-item">Órdenes de Compra</a>
-              <a href="#/trazabilidad" data-tab="trazabilidad" class="nav-item">Trazabilidad</a>
-              <a href="#/auditoria" data-tab="auditoria" class="nav-item">Auditoría</a>
-              <a href="#/evaluacion_prov" data-tab="evaluacion_prov" class="nav-item">Evaluación Prov.</a>
-              <a href="#/kardex" data-tab="kardex" class="nav-item">Kardex</a>
-              <a href="#/compras" data-tab="compras" class="nav-item">Compras</a>
-              <a href="#/mermas" data-tab="mermas" class="nav-item">Mermas</a>
-              <a href="#/historico" data-tab="historico" class="nav-item">Histórico</a>
-              <a href="#/costos" data-tab="costos" class="nav-item">Costos OP</a>
-              <a href="#/rentabilidad" data-tab="rentabilidad" class="nav-item">Rentabilidad</a>
+              <a href="#/programacion" data-tab="programacion" class="nav-item" title="Programación semanal de producción">Programación</a>
+              <a href="#/consolidado" data-tab="consolidado" class="nav-item" title="Consolidado de materias primas">Consolidado MP</a>
+              <a href="#/ordenes_compra" data-tab="ordenes_compra" class="nav-item" title="Seguimiento de Órdenes de Compra">Órdenes de Compra</a>
+              <a href="#/trazabilidad" data-tab="trazabilidad" class="nav-item" title="Trazabilidad de lotes end-to-end (INVIMA)">Trazabilidad</a>
+              <a href="#/auditoria" data-tab="auditoria" class="nav-item" title="Informes y conteo físico">Auditoría</a>
+              <a href="#/evaluacion_prov" data-tab="evaluacion_prov" class="nav-item" title="Evaluación y desempeño de proveedores">Evaluación Prov.</a>
+              <a href="#/kardex" data-tab="kardex" class="nav-item" title="Historial de movimientos por insumo">Kardex</a>
+              <a href="#/compras" data-tab="compras" class="nav-item" title="Compras por proveedor">Compras</a>
+              <a href="#/mermas" data-tab="mermas" class="nav-item" title="Mermas y ajustes de inventario">Mermas</a>
+              <a href="#/historico" data-tab="historico" class="nav-item" title="Gráficos y tendencias">Histórico</a>
+              <a href="#/costos" data-tab="costos" class="nav-item" title="Costo real vs teórico por OP">Costos OP</a>
+              <a href="#/rentabilidad" data-tab="rentabilidad" class="nav-item" title="Margen y rentabilidad por producto">Rentabilidad</a>
             </div>
           </div>
 
@@ -118,9 +118,9 @@ export function renderLayout(container, onLogout) {
               <span class="nav-group-arrow">▾</span>
             </button>
             <div class="nav-group-items">
-              <a href="#/configuracion" data-tab="configuracion" class="nav-item">Configuración</a>
-              ${profile.role === 'admin' ? `<a href="#/usuarios" data-tab="usuarios" class="nav-item">Usuarios</a>` : ''}
-              ${profile.role === 'admin' ? `<a href="#/backup" data-tab="backup" class="nav-item">Backup</a>` : ''}
+              <a href="#/configuracion" data-tab="configuracion" class="nav-item" title="Configuración global del sistema">Configuración</a>
+              ${profile.role === 'admin' ? `<a href="#/usuarios" data-tab="usuarios" class="nav-item" title="Gestión de usuarios y roles">Usuarios</a>` : ''}
+              ${profile.role === 'admin' ? `<a href="#/backup" data-tab="backup" class="nav-item" title="Backup y exportación de datos">Backup</a>` : ''}
             </div>
           </div>
 

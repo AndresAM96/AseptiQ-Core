@@ -3,15 +3,26 @@ import { rpc } from '../../shared/http/rpc.js';
 import { traducirError } from '../../shared/http/errores.js';
 
 export async function getOrdenesData() {
-  const [prodsRes, opsRes] = await Promise.all([
+  const [prodsRes, opsRes, ultimasRes] = await Promise.all([
     supabase.from('productos_terminados').select('codigo_pt, nombre, unidades_por_caja').eq('estado_activo', true).order('nombre'),
-    supabase.from('ordenes_semanales').select('*').order('fecha_creacion', { ascending: false }).limit(50)
+    supabase.from('ordenes_semanales')
+      .select('*, productos_terminados(nombre, unidades_por_caja)')
+      .order('fecha_creacion', { ascending: false }),
+    supabase.from('ordenes_semanales')
+      .select('*, productos_terminados(nombre)')
+      .order('fecha_creacion', { ascending: false })
+      .limit(5)
   ]);
 
   if (prodsRes.error) throw new Error(traducirError(prodsRes.error.message));
   if (opsRes.error) throw new Error(traducirError(opsRes.error.message));
+  if (ultimasRes.error) throw new Error(traducirError(ultimasRes.error.message));
 
-  return { productos: prodsRes.data, ordenes: opsRes.data };
+  return {
+    productos: prodsRes.data || [],
+    ordenes: opsRes.data || [],
+    ultimas: ultimasRes.data || []
+  };
 }
 
 export async function getSiguienteOP() {

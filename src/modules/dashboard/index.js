@@ -1,6 +1,6 @@
 import { renderDashboard } from './view.js';
 import { getDashboardData } from './repository.js';
-import { getConfig } from '../insumos/repository.js'; // Reutilizamos la función de config
+import { getConfig } from '../insumos/repository.js';
 import { traducirError } from '../../shared/http/errores.js';
 
 export const moduloDashboard = {
@@ -15,7 +15,6 @@ export const moduloDashboard = {
       ]);
 
       renderDashboard(container, data, config);
-
     } catch (error) {
       container.innerHTML = `<div style="color: var(--danger);">Error cargando dashboard: ${traducirError(error.message)}</div>`;
     }
