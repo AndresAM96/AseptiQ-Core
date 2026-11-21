@@ -287,7 +287,7 @@ export function abrirModalNuevaOP(productos, sugerido, onCalcular) {
       <button id="btn-calcular" style="background: var(--accent); color: var(--accent-ink); border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer;">Calcular Cobertura</button>
     `,
     onOpen: (overlay) => {
-      overlay.querySelector('#btn-cancel').onclick = cerrarModal;
+      overlay.querySelector('#btn-cancel').onclick = () => cerrarModal();
 
       // Preview de cajas
       const selPT = overlay.querySelector('#op-pt');
@@ -387,7 +387,7 @@ export function abrirModalCobertura(data, simulacion, insumos, onConfirmar) {
       <button id="btn-confirmar" style="background: var(--accent); color: var(--accent-ink); border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer;">Confirmar Orden</button>
     `,
     onOpen: (overlay) => {
-      overlay.querySelector('#btn-cancel-cob').onclick = cerrarModal;
+      overlay.querySelector('#btn-cancel-cob').onclick = () => cerrarModal();
 
       const btnConf = overlay.querySelector('#btn-confirmar');
       btnConf.onclick = async () => {
@@ -431,7 +431,7 @@ export function abrirModalEntrega(numero_op, pendiente, onSave) {
       <button id="btn-save-ent" style="background: var(--success); color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer;">Confirmar Entrega</button>
     `,
     onOpen: (overlay) => {
-      overlay.querySelector('#btn-cancel-ent').onclick = cerrarModal;
+      overlay.querySelector('#btn-cancel-ent').onclick = () => cerrarModal();
 
       overlay.querySelector('#btn-save-ent').onclick = async () => {
         const cant = parseFloat(overlay.querySelector('#ent-cant').value);

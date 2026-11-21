@@ -263,7 +263,7 @@ export function abrirModalEntrada(data, onSave) {
 
       bindInsumo(overlay);
 
-      overlay.querySelector('#btn-cancel').onclick = cerrarModal;
+      overlay.querySelector('#btn-cancel').onclick = () => cerrarModal();
 
       overlay.querySelector('#btn-save').onclick = async () => {
         const btn = overlay.querySelector('#btn-save');
