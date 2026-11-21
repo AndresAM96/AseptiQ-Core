@@ -70,56 +70,63 @@ export function renderOrdenes(container, data, handlers) {
     </div>
 
     <!-- Panel Referencia -->
-    <div class="panel force-collapsed" style="background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; overflow: hidden;">
-      <div class="panel-header" style="padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+    <div class="panel-collapsible collapsed" id="panel-referencia" style="background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; overflow: hidden;">
+      <div class="panel-header" id="header-referencia" style="padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
         <h3 style="margin: 0; font-size: 14px; font-weight: 600;">Referencia · Últimas 5 OPs cargadas</h3>
-        <span style="color: var(--text-muted); transform: rotate(90deg);">›</span>
+        <button class="panel-toggle-btn" title="Expandir/Colapsar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
       </div>
-      <div class="panel-body" style="display: none;">
-        ${ultimas.length === 0 ? '<div style="padding: 20px; text-align: center; color: var(--text-muted);">Aún no hay OPs cargadas.</div>' : `
-        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
-          <thead>
-            <tr style="border-bottom: 1px solid var(--border); text-align: left; background: var(--surface-2);">
-              <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500;">N° OP</th>
-              <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500;">Lote</th>
-              <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500;">Producto</th>
-              <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500; text-align: right;">Cant.</th>
-              <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500;">Fecha</th>
-            </tr>
-          </thead>
-          <tbody>${filasRef}</tbody>
-        </table>`}
+      <div class="panel-body-wrapper">
+        <div class="panel-body-inner">
+          ${ultimas.length === 0 ? '<div style="padding: 20px; text-align: center; color: var(--text-muted);">Aún no hay OPs cargadas.</div>' : `
+          <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border); text-align: left; background: var(--surface-2);">
+                <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500;">N° OP</th>
+                <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500;">Lote</th>
+                <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500;">Producto</th>
+                <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500; text-align: right;">Cant.</th>
+                <th style="padding: 10px 12px; color: var(--text-secondary); font-weight: 500;">Fecha</th>
+              </tr>
+            </thead>
+            <tbody>${filasRef}</tbody>
+          </table>`}
+        </div>
       </div>
     </div>
 
     <!-- Panel Principal -->
-    <div class="panel" style="background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;">
-      <div class="panel-header" style="padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+    <div class="panel-collapsible" id="panel-ordenes" style="background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;">
+      <div class="panel-header" id="header-ordenes" style="padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 12px; cursor: pointer;">
         <h3 style="margin: 0; font-size: 14px; font-weight: 600;">Órdenes registradas</h3>
         <div style="display: flex; gap: 6px; align-items: center;">
-          <button id="btn-export-ordenes" class="secondary small" title="Descargar las órdenes en formato Excel (CSV)" style="background: var(--surface-3); border: 1px solid var(--border); color: var(--text-primary); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 4px;">
+          <button id="btn-export-ordenes" class="secondary small" title="Descargar las órdenes en formato Excel (CSV)" style="background: var(--surface-3); border: 1px solid var(--border); color: var(--text-primary); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 4px;" onclick="event.stopPropagation();">
             ${icono('download','sm')} Exportar CSV
           </button>
-          <button id="btn-refresh-ordenes" title="Actualizar la lista de órdenes" style="background: transparent; border: 1px solid var(--border); color: var(--text-secondary); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          <button id="btn-refresh-ordenes" title="Actualizar la lista de órdenes" style="background: transparent; border: 1px solid var(--border); color: var(--text-secondary); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center;" onclick="event.stopPropagation();">
             ${icono('clock','sm')}
           </button>
-          <button class="btn-add" id="btn-nueva-op" title="Crear nueva Orden de Producción (OP)" style="background: var(--accent); color: var(--accent-ink); border: none; width: 30px; height: 30px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
-          <span style="color: var(--text-muted); transform: rotate(-90deg);">›</span>
+          <button class="btn-add" id="btn-nueva-op" title="Crear nueva Orden de Producción (OP)" style="background: var(--accent); color: var(--accent-ink); border: none; width: 30px; height: 30px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;" onclick="event.stopPropagation();">+</button>
+          <button class="panel-toggle-btn" title="Expandir/Colapsar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
         </div>
       </div>
-      
-      <div style="padding: 12px 18px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; flex-wrap: wrap;">
-        <input type="text" id="buscar_ordenes" placeholder="Buscar por OP o producto..." style="flex: 1 1 220px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); color: var(--text-primary); padding: 10px 12px; font-size: 13.5px;">
-      </div>
-      
-      <div style="padding: 10px 18px; border-bottom: 1px solid var(--border); background: var(--surface-2);">
-        <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-secondary); cursor: pointer;">
-          <input type="checkbox" id="toggleFinalizadas" style="width: auto; margin: 0; cursor: pointer;">
-          Mostrar también las órdenes terminadas y canceladas
-        </label>
-      </div>
+      <div class="panel-body-wrapper">
+        <div class="panel-body-inner">
+          <div style="padding: 12px 18px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; flex-wrap: wrap;">
+            <input type="text" id="buscar_ordenes" placeholder="Buscar por OP o producto..." style="flex: 1 1 220px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); color: var(--text-primary); padding: 10px 12px; font-size: 13.5px;">
+          </div>
+          
+          <div style="padding: 10px 18px; border-bottom: 1px solid var(--border); background: var(--surface-2);">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-secondary); cursor: pointer;">
+              <input type="checkbox" id="toggleFinalizadas" style="width: auto; margin: 0; cursor: pointer;">
+              Mostrar también las órdenes terminadas y canceladas
+            </label>
+          </div>
 
-      <div style="overflow-x: auto;">
+          <div style="overflow-x: auto;">
         <table id="tablaOrdenes" class="responsive-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
           <thead>
             <tr style="border-bottom: 1px solid var(--border); text-align: left; background: var(--surface-2);">
@@ -137,6 +144,8 @@ export function renderOrdenes(container, data, handlers) {
             ${ordenes.length === 0 ? '<tr><td colspan="8" style="padding: 32px; text-align: center; color: var(--text-muted);">No hay órdenes para mostrar.</td></tr>' : filasOrdenes}
           </tbody>
         </table>
+      </div>
+        </div>
       </div>
     </div>
   `;
@@ -192,6 +201,22 @@ export function renderOrdenes(container, data, handlers) {
   });
 
   container.querySelector('#btn-export-ordenes').onclick = () => handlers.onExportar();
+
+  // --- LÓGICA DE PANELES COLAPSABLES ---
+  const setupToggle = (panelId, headerId) => {
+    const panel = container.querySelector(panelId);
+    const header = container.querySelector(headerId);
+    if (!panel || !header) return;
+
+    header.onclick = (e) => {
+      // Si el clic fue en un botón dentro del header, no colapsar
+      if (e.target.closest('button') && !e.target.closest('.panel-toggle-btn')) return;
+      panel.classList.toggle('collapsed');
+    };
+  };
+
+  setupToggle('#panel-referencia', '#header-referencia');
+  setupToggle('#panel-ordenes', '#header-ordenes');
 
   container.querySelector('#btn-refresh-ordenes').onclick = (e) => {
     const btn = e.currentTarget;
