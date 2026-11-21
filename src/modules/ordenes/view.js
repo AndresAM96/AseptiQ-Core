@@ -186,6 +186,23 @@ export function renderOrdenes(container, data, handlers) {
       handlers.onCancelar(btn.dataset.cancelar);
     };
   });
+
+  container.querySelectorAll('[data-detalle]').forEach(btn => {
+    btn.onclick = () => handlers.onVerDetalle(btn.dataset.detalle);
+  });
+
+  container.querySelector('#btn-export-ordenes').onclick = () => handlers.onExportar();
+
+  container.querySelector('#btn-refresh-ordenes').onclick = (e) => {
+    const btn = e.currentTarget;
+    btn.style.transform = 'rotate(360deg)';
+    btn.style.transition = 'transform 0.5s ease';
+    setTimeout(() => {
+      btn.style.transform = 'rotate(0deg)';
+      btn.style.transition = 'none';
+    }, 500);
+    handlers.onRefrescar();
+  };
 }
 
 export function abrirModalNuevaOP(productos, sugerido, onCalcular) {
