@@ -23,8 +23,9 @@ export function abrirModal(opts) {
 
   overlay.innerHTML = `
     <div class="modal-box" style="max-width: ${maxW};">
-      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: flex-start; padding: 22px 24px 16px; border-bottom: 1px solid var(--border);">
-        <div>
+      <div class="modal-header" style="display: flex; align-items: flex-start; gap: 16px; padding: 22px 24px 16px; border-bottom: 1px solid var(--border);">
+        ${opts.icon ? `<div style="flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%; background: ${opts.iconBg || 'var(--surface-3)'}; color: ${opts.iconColor || 'var(--text-primary)'}; display: flex; align-items: center; justify-content: center; font-size: 20px;">${opts.icon}</div>` : ''}
+        <div style="flex: 1;">
           <h3 style="margin: 0; font-size: 16px; font-weight: 600;">${opts.title}</h3>
           ${opts.subtitle ? `<p style="margin: 4px 0 0; font-size: 13px; color: var(--text-secondary);">${opts.subtitle}</p>` : ''}
         </div>
