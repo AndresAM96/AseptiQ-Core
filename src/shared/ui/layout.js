@@ -22,7 +22,7 @@ export function renderLayout(container, onLogout) {
       <div style="width: 32px;"></div>
     </header>
 
-    <div class="sidebar-overlay" id="sidebar-overlay" style="position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:999; opacity:0; pointer-events:none; transition:opacity 0.3s ease;"></div>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <div class="layout-wrapper" style="display: flex; min-height: 100vh; background: var(--bg);">
       
@@ -176,16 +176,15 @@ export function renderLayout(container, onLogout) {
     btnToggleSidebar.style.transform = 'rotate(180deg)';
   }
 
+    // 2. Drawer (Móvil)
   btnMobileMenu.onclick = () => {
-    sidebar.style.transform = 'translateX(0)';
-    overlay.style.opacity = '1';
-    overlay.style.pointerEvents = 'auto';
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
   };
 
   const cerrarDrawer = () => {
-    sidebar.style.transform = 'translateX(-100%)';
-    overlay.style.opacity = '0';
-    overlay.style.pointerEvents = 'none';
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
   };
 
   overlay.onclick = cerrarDrawer;
