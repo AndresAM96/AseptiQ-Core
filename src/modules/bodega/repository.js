@@ -9,7 +9,7 @@ export async function getCajas() {
     .limit(50);
 
   if (error) throw new Error(traducirError(error.message));
-  return data;
+  return data || [];
 }
 
 export async function guardarUbicacion(data) {
@@ -20,14 +20,17 @@ export async function guardarUbicacion(data) {
     codigo_pt = match[1].toUpperCase();
   }
 
-  const { error } = await supabase.from('cajas_ubicacion').upsert({
-    codigo_caja: data.codigo,
-    codigo_pt: codigo_pt, // Si el código es inválido, se guarda como null (la DB lo permite)
-    ubicacion: data.ubicacion,
-    estado: data.estado,
-    usuario_email: (await supabase.auth.getUser()).data.user?.email,
-    actualizado_en: new Date().toISOString()
-  }, { onConflict: 'codigo_caja' });
+  const { error } = await supabase.from('cajas_ubicacion').upsert(
+    {
+      codigo_caja: data.codigo,
+      codigo_pt: codigo_pt,
+      ubicacion: data.ubicacion,
+      estado: data.estado,
+      usuario_email: (await supabase.auth.getUser()).data.user?.email,
+      actualizado_en: new Date().toISOString(),
+    },
+    { onConflict: 'codigo_caja' }
+  );
 
   if (error) throw new Error(traducirError(error.message));
 }
