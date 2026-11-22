@@ -2,6 +2,8 @@ import { esc, num } from '../../core/formatters.js';
 import { toast } from '../../shared/ui/toast.js';
 import { abrirModal, cerrarModal } from '../../shared/ui/modal.js';
 import { icono } from '../../shared/ui/icons.js';
+import { abrirModalInsumo } from '../insumos/view.js';
+import { getSiguienteCodigo, crearInsumo, getConfig } from '../insumos/repository.js';
 
 export function renderSubproductos(container, data) {
   const { subproductos } = data;
@@ -131,7 +133,7 @@ export function abrirModalSubproducto(sub, data, sugerido, handlers) {
         }))
     : [];
 
-  const opcionesInsumos = data.insumos
+  let opcionesInsumos = data.insumos
     .map((i) => `<option value="${i.id}">${esc(i.nombre)} (${esc(i.unidad_consumo)})</option>`)
     .join('');
   const opcionesSubs = data.subproductos
@@ -279,10 +281,37 @@ export function abrirModalSubproducto(sub, data, sugerido, handlers) {
       };
 
       // Modales apilados para crear insumo
-      overlay.querySelector('#btn-crear-insumo').onclick = () => {
-        // Aquí llamamos al modal de insumos (asumiendo que lo importamos)
-        // En un caso real: importar abrirModalInsumo desde '../insumos/view.js'
-        toast('Abre el módulo de Insumos para crear uno nuevo por ahora.', 'info');
+      overlay.querySelector('#btn-crear-insumo').onclick = async () => {
+        try {
+          // 1. Traemos el código sugerido y la configuración (prefijos)
+          const [sugerido, config] = await Promise.all([getSiguienteCodigo(), getConfig()]);
+
+          // 2. Abrimos el modal de Insumo encima
+          abrirModalInsumo(null, config, sugerido, async (id, nuevoInsumoData) => {
+            // 3. Guardamos el insumo en la base de datos
+            const insumoGuardado = await crearInsumo(nuevoInsumoData);
+
+            // 4. Actualizamos la data local y las opciones del select
+            data.insumos.push(insumoGuardado);
+            opcionesInsumos = data.insumos
+              .map(
+                (i) =>
+                  `<option value="${i.id}">${esc(i.nombre)} (${esc(i.unidad_consumo)})</option>`
+              )
+              .join('');
+
+            // 5. Lo agregamos a la receta actual del subproducto
+            filasReceta.push({ id: insumoGuardado.id, cantidad: '1', conversión: false });
+
+            // 6. Re-renderizamos la tabla de receta
+            renderReceta();
+            toast('Insumo creado y agregado a la receta', 'success');
+
+            // Nota: abrirModalInsumo ya cierra su propio modal automáticamente al guardar.
+          });
+        } catch (err) {
+          toast(err.message, 'error');
+        }
       };
 
       renderReceta();
