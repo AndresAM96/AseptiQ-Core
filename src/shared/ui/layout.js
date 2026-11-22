@@ -70,8 +70,9 @@ export function renderLayout(container, onLogout) {
               <a href="#/dashboard" data-tab="dashboard" class="nav-item" title="Ir al Dashboard general">Dashboard</a>
               <a href="#/ordenes" data-tab="ordenes" class="nav-item" title="Crear y gestionar órdenes de producción">Cargar orden</a>
               <a href="#/novedades" data-tab="novedades" class="nav-item" title="Historial de órdenes activas">Novedades</a>
-              <a href="#/entradas" data-tab="entradas" class="nav-item" title="Registrar recepción de mercancía">Entrada mercancía</a>
-              <a href="#/devoluciones" data-tab="devoluciones" class="nav-item" title="Devoluciones a proveedor">Devoluciones</a>
+              <a href="#/entradas" data-tab="entradas" class="nav-item">Entrada mercancía</a>
+              <a href="#/central" data-tab="central" class="nav-item">Central EO</a>
+              <a href="#/devoluciones" data-tab="devoluciones" class="nav-item">Devoluciones</a>
               <a href="#/despachos" data-tab="despachos" class="nav-item" title="Salidas a clientes y entregas diarias">Despachos</a>
               <a href="#/bodega" data-tab="bodega" class="nav-item" title="Escanear y ubicar cajas en bodega">Bodega PT</a>
             </div>
