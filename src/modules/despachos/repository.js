@@ -4,28 +4,31 @@ import { traducirError } from '../../shared/http/errores.js';
 
 export async function getDespachosData() {
   const [prodsRes, despachosRes] = await Promise.all([
-    supabase.from('productos_terminados').select('codigo_pt, nombre, existencia_actual, unidades_por_caja').eq('estado_activo', true).order('nombre'),
-    supabase.from('despachos').select('*').order('fecha', { ascending: false }).limit(30)
+    supabase.from('productos_terminados').select('codigo_pt, nombre, existencia_actual, unidades_por_caja, requiere_esterilizacion').eq('estado_activo', true).order('nombre'),
+    supabase.from('despachos')
+      .select('*, productos_terminados(nombre)')
+      .order('fecha', { ascending: false })
+      .order('creado_en', { ascending: false })
+      .limit(100)
   ]);
 
   if (prodsRes.error) throw new Error(traducirError(prodsRes.error.message));
   if (despachosRes.error) throw new Error(traducirError(despachosRes.error.message));
 
-  return { productos: prodsRes.data, despachos: despachosRes.data };
+  return { productos: prodsRes.data || [], despachos: despachosRes.data || [] };
 }
 
-// Obtiene los lotes disponibles de un PT ordenados por FIFO
-export async function getLotesFIFO(codigo_pt) {
+export async function getLotesDisponibles(codigo_pt) {
   const { data, error } = await supabase
     .from('lotes_pt')
-    .select('*')
+    .select('lote_op, lote_eo, cantidad_actual')
     .eq('codigo_pt', codigo_pt)
     .eq('estado', 'en_bodega')
     .gt('cantidad_actual', 0)
-    .order('fecha_produccion', { ascending: true }); // FIFO
+    .order('fecha_produccion', { ascending: true });
 
   if (error) throw new Error(traducirError(error.message));
-  return data;
+  return data || [];
 }
 
 export async function registrarDespacho(data) {
