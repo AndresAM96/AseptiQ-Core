@@ -88,7 +88,7 @@ export function renderLayout(container, onLogout) {
               <a href="#/productos" data-tab="productos" class="nav-item" title="Subproductos y paquetes con BOM">Productos & BOM</a>
               <a href="#/subproductos" data-tab="subproductos" class="nav-item" title="Productos en proceso intermedios">Subproductos</a>
               <a href="#/proveedores" data-tab="proveedores" class="nav-item" title="Maestro de proveedores">Proveedores</a>
-              <a href="#/produccion" data-tab="produccion" class="nav-item" title="Fabricar subproductos para stock">Producción Subprod.</a>
+              <a href="#/produccion" data-tab="produccion" class="nav-item" title="Fabricar subproductos para stock">Producción Interna</a>
             </div>
           </div>
 
