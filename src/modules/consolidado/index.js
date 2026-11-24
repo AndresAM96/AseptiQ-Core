@@ -1,4 +1,4 @@
-import { renderConsolidado } from './view.js';
+import { renderConsolidado, renderResultadoConsolidado, imprimirConsolidado } from './view.js';
 import { generarConsolidado } from './repository.js';
 import { toast } from '../../shared/ui/toast.js';
 import { traducirError } from '../../shared/http/errores.js';
@@ -6,25 +6,27 @@ import { traducirError } from '../../shared/http/errores.js';
 export const moduloConsolidado = {
   id: 'consolidado',
   mount: async (container) => {
-    let dataActual = null;
+    try {
+      const handlers = {
+        onGenerar: async (desde, hasta) => {
+          const box = container.querySelector('#cons-resultado');
+          box.innerHTML =
+            '<div style="text-align:center; color:var(--text-muted); padding:40px;">Calculando requerimientos...</div>';
 
-    const cargarDatos = async () => {
-      const panel = container.querySelector('#mrp-panel');
-      panel.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-muted);">Calculando requerimientos (esto puede tardar)...</div>';
+          try {
+            const data = await generarConsolidado(desde, hasta);
+            renderResultadoConsolidado(container, desde, hasta, data, imprimirConsolidado);
+          } catch (error) {
+            box.innerHTML = `<div style="color: var(--danger); text-align: center; padding: 20px;">Error: ${traducirError(error.message)}</div>`;
+            toast('Error cargando el consolidado', 'error');
+          }
+        },
+      };
 
-      try {
-        dataActual = await generarConsolidado();
-        renderConsolidado(container, dataActual, cargarDatos);
-        if (!container.dataset.init) {
-          toast('Consolidado generado exitosamente', 'success');
-          container.dataset.init = 'true';
-        }
-      } catch (error) {
-        panel.innerHTML = `<div style="color: var(--danger);">Error: ${traducirError(error.message)}</div>`;
-      }
-    };
-
-    renderConsolidado(container, dataActual, cargarDatos);
+      renderConsolidado(container, handlers);
+    } catch (error) {
+      container.innerHTML = `<div style="color: var(--danger);">Error: ${traducirError(error.message)}</div>`;
+    }
   },
-  unmount: () => {}
+  unmount: () => {},
 };

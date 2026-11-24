@@ -2,53 +2,63 @@ import { supabase } from '../../shared/http/client.js';
 import { rpc } from '../../shared/http/rpc.js';
 import { traducirError } from '../../shared/http/errores.js';
 
-export async function generarConsolidado() {
-  // 1. Traemos las OPs activas y todos los insumos
+export async function generarConsolidado(desde, hasta) {
+  // 1. Traemos OPs y todos los insumos
   const [opsRes, insumosRes] = await Promise.all([
-    supabase.from('ordenes_semanales')
-      .select('*')
-      .in('estado_op', ['Pendiente', 'En proceso']),
-    supabase.from('insumos').select('id, codigo, nombre, existencia_actual, unidad_consumo, costo_unitario')
+    supabase.from('ordenes_semanales').select('*').in('estado_op', ['Pendiente', 'En proceso']),
+    supabase
+      .from('insumos')
+      .select('id, codigo, nombre, existencia_actual, unidad_consumo, costo_unitario'),
   ]);
 
   if (opsRes.error) throw new Error(traducirError(opsRes.error.message));
-  if (insumosRes.error) throw new Error(traducirError(insumosRes.error.message));
 
-  const ops = opsRes.data;
-  const insumos = insumosRes.data;
+  const ops = opsRes.data || [];
+  const insumos = insumosRes.data || [];
 
-  // 2. Agregar requerimientos
-  const requerimientos = {}; // { insumo_id: cantidad_total }
+  // 2. Filtrar OPs por el rango de fechas
+  const opsEnRango = ops.filter((o) => {
+    const fIni = o.fecha_programada || o.fecha_creacion.split('T')[0];
+    const fFin = o.fecha_fin_programada || fIni;
+    return fIni <= hasta && fFin >= desde;
+  });
 
-  for (const op of ops) {
-    const pendiente = op.cantidad_proyectada - op.cantidad_producida;
+  if (opsEnRango.length === 0) return { resultado: [], totalOps: 0 };
+
+  // 3. Calcular requerimientos
+  const requerimientos = {};
+
+  for (const op of opsEnRango) {
+    const pendiente = op.cantidad_proyectada - (op.cantidad_producida || 0);
     if (pendiente <= 0) continue;
 
     try {
-      // Usamos el RPC de simulación para cada OP
-      const simulacion = await rpc('simular_consumo_pt', {
+      // Usamos el RPC para simular la explosión de materiales
+      const sim = await rpc('simular_consumo_pt', {
         p_codigo_pt: op.codigo_pt,
-        p_cantidad: pendiente
+        p_cantidad: pendiente,
       });
+      const reqs = sim.insumo_req || {};
 
-      const reqs = simulacion.insumo_req || {};
-      for (const [insId, cant] of Object.entries(reqs)) {
-        requerimientos[insId] = (requerimientos[insId] || 0) + cant;
+      for (const [id, cant] of Object.entries(reqs)) {
+        requerimientos[id] = (requerimientos[id] || 0) + cant;
       }
-    } catch (err) {
-      console.warn(`Error simulando OP ${op.numero_op}`, err);
+    } catch (e) {
+      console.warn('Error simulando OP', op.numero_op, e);
     }
   }
 
-  // 3. Armar resultado final cruzando con el stock
-  const resultado = Object.keys(requerimientos).map(insId => {
-    const ins = insumos.find(i => i.id === insId);
-    const requerido = requerimientos[insId];
-    const stock = ins ? ins.existencia_actual : 0;
-    const faltante = Math.max(0, requerido - stock);
+  // 4. Cruzar con stock real
+  const resultado = Object.keys(requerimientos)
+    .map((id) => {
+      const ins = insumos.find((i) => i.id === id);
+      const requerido = requerimientos[id];
+      const stock = ins ? ins.existencia_actual : 0;
+      const faltante = Math.max(0, requerido - stock);
+      return { ins, requerido, stock, faltante };
+    })
+    .filter((r) => r.ins)
+    .sort((a, b) => b.faltante - a.faltante || b.requerido - a.requerido);
 
-    return { ins, requerido, stock, faltante };
-  }).filter(r => r.ins).sort((a, b) => b.faltante - a.faltante);
-
-  return { resultado, totalOps: ops.length };
+  return { resultado, totalOps: opsEnRango.length };
 }
